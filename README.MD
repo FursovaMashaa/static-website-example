@@ -1,4 +1,4 @@
-TEST
+
 Static Website Example
 ----------------------
 
