@@ -1,0 +1,49 @@
+name: CI - Validate Static Site
+
+on:
+  push:
+    branches: [github-actions, main]
+  pull_request:
+    branches: [github-actions, main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Check HTML structure
+        run: |
+          echo "🔍 Checking static website structure..."
+          
+          # Проверяем обязательные файлы
+          REQUIRED_FILES=("index.html")
+          
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "❌ ERROR: Required file $file not found!"
+              exit 1
+            else
+              echo "✅ Found: $file"
+            fi
+          done
+          
+          # Проверяем структуру
+          echo "📁 Directory structure:"
+          find . -type f -name "*.html" -o -name "*.css" -o -name "*.js" | head -20
+          
+          # Простая проверка HTML
+          if grep -qi "<!DOCTYPE html>" index.html; then
+            echo "✅ HTML doctype found"
+          else
+            echo "⚠️  Warning: HTML doctype not found in index.html"
+          fi
+          
+          echo "🎉 Validation passed!"
+      
+      - name: Check file sizes
+        run: |
+          echo "📊 File sizes:"
+          find . -type f \( -name "*.html" -o -name "*.css" -o -name "*.js" \) -exec ls -lh {} \;
