@@ -3,7 +3,6 @@ name: CD - Deploy to Production
 on:
   release:
     types: [published]
-  # Можно добавить ручной запуск:
   workflow_dispatch:
 
 jobs:
@@ -19,7 +18,7 @@ jobs:
         with:
           host: course.prafdin.ru
           port: 2200
-          username: ваш_пользователь_на_ВМ  # например, ubuntu или student
+          username: vboxuser
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             echo "🚀 Starting deployment at $(date)"
